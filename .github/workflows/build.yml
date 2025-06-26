@@ -16,13 +16,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Needed for SonarCloud analysis accuracy
+          fetch-depth: 0
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           java-version: 17
-          distribution: 'temurin'  # You can also use 'temurin' or 'adopt'
+          distribution: 'zulu'
 
       - name: Cache Maven packages
         uses: actions/cache@v4
@@ -38,10 +38,12 @@ jobs:
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
 
-      - name: Build and analyze
+      - name: Build and analyze with SonarCloud
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
-          -Dsonar.projectKey=Nambeeshwaran03_spring-logger \
-          -Dsonar.organization=nambeeshwaran03 \
-          -Dsonar.host.url=https://sonarcloud.io
+        run: |
+          mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
+            -Dsonar.projectKey=Nambeeshwaran03_spring-logger \
+            -Dsonar.organization=nambeeshwaran03 \
+            -Dsonar.host.url=https://sonarcloud.io \
+            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
