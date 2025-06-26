@@ -11,7 +11,8 @@ public class HomeControllerTest {
     @Test
     public void testHomeReturnsHomeView() {
         HomeController controller = new HomeController();
-        String viewName = controller.home(null);
+        Model mockModel = mock(Model.class);
+        String viewName = controller.home(mockModel);
         assertEquals("home", viewName);
     }
 
@@ -19,9 +20,7 @@ public class HomeControllerTest {
     public void testHomeSetsWelcomeMessage() {
         HomeController controller = new HomeController();
         Model mockModel = mock(Model.class);
-
         String viewName = controller.home(mockModel);
-
         verify(mockModel).addAttribute("welcomeMessage", "Welcome to the home page!");
         assertEquals("home", viewName);
     }
